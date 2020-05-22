@@ -1,6 +1,6 @@
 <img src='image/taller.png' align="right" height="100"/>
 
-# Taller introductorio de R para el procesamiento de datos en `R`   
+# Taller introductorio para el procesamiento de datos en `R`  
 
 Una de las herramientas más útiles para realizar estas tareas es [`R`](https://www.r-project.org/), un lenguaje y entorno de programación libre para el procesamiento y análisis de datos en un sinnúnmero de disciplinas. La gran ventaja de esta herramienta, además de ser gratuito, es su flexibilidad y versatilidad, ya que con más de [15000 librerías disponibles](https://cran.r-project.org/web/packages/) se puede realizar una amplia gama de tareas con datos de distinta naturaleza. No obstante, una "desventaja" de este entorno es la gran cantidad de información disponible (tutoriales, blogs, libros, etc.) lo que dificulta el **iniciarse en `R`**. 
 
