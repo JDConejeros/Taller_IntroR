@@ -1,10 +1,10 @@
-<img src='image/taller.png' align="right" height="100"/>
+<img src='image/JJR 350px.png' align="right" height="100"/>
 
 <br>
 
 # Taller introductorio para el procesamiento de datos en `R` 
 
-Una de las herramientas más útiles para realizar estas tareas es [`R`](https://www.r-project.org/), un lenguaje y entorno de programación libre para el procesamiento y análisis de datos en un sinnúnmero de disciplinas. La gran ventaja de esta herramienta, además de ser gratuito, es su flexibilidad y versatilidad, ya que con más de [15000 librerías disponibles](https://cran.r-project.org/web/packages/) se puede realizar una amplia gama de tareas con datos de distinta naturaleza. No obstante, una "desventaja" de este entorno es la gran cantidad de información disponible (tutoriales, blogs, libros, etc.) lo que dificulta el **iniciarse en `R`**. 
+Revisa el programa completo en el [siguiente link](https://github.com/JDConejeros/Taller_IntroR/blob/master/Programa_Intro_JJR.pdf).
 
 El objetivo de este taller es introducir de manera práctica a las principales herramientas que ofrecen [`R`](https://www.r-project.org/) y [RStudio](https://rstudio.com/products/rstudio/download/) para la gestión y procesamiento de datos cuantitativos. Se espera entregar a los/as participantes una base sólida para *iniciarse en `R`* y que una vez finalizado este taller, puedan seguir una formación autónoma. 
 
