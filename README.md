@@ -13,19 +13,19 @@ El objetivo de este taller es introducir de manera práctica a las principales h
 
 Los temas de las sesiones son las siguientes:
 
-**Sesión 1:** Exploración inicial con `R` y `RStudio`
+[Sesión 1:](https://github.com/JDConejeros/Taller_IntroR/tree/master/sesiones/S1_Intregrando_Rstudio) Exploración inicial con `R` y `RStudio`
 
-**Sesión 2:** Importar y explorar una base de datos
+[Sesión 2:]()** Importar y explorar una base de datos
 
-**Sesión 3:** Procesamiento de datos con `dplyr` I
+[Sesión 3:]()** Procesamiento de datos con `dplyr` I
 
-**Sesión 4:** Procesamiento de datos con `dplyr` II
+[Sesión 4:]()** Procesamiento de datos con `dplyr` II
 
-**Sesión 5:** Asociación de variables
+[Sesión 5:]()** Asociación de variables
 
-**Sesión 6:** Introducción a la visualización de datos con `ggplot`
+[Sesión 6:]()** Introducción a la visualización de datos con `ggplot`
 
-**Sesión 7:** Reportería con Rmarkdown
+[Sesión 7:]()** Reportería con Rmarkdown
 
 # Links de referencia
 
