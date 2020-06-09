@@ -2,7 +2,7 @@
 
 <br>
 
-# Taller introductorio para el procesamiento de datos en `R` 
+# Taller introductorio al procesamiento de datos en `R` 
 
 Revisa el programa completo en el [siguiente link](https://github.com/JDConejeros/Taller_IntroR/blob/master/Programa_Intro_JJR.pdf).
 
