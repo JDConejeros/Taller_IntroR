@@ -273,6 +273,9 @@ search() #Revisamos los paquetes y herramientas instaladas
 
 # 1. Genere su propia base de datos a partir de la tabla disponible con los casos de coronavirus para cada región del país
 
+base <- read.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto4/2020-06-11-CasosConfirmados-totalRegional.csv")[ ,1:2]
+colnames(base) <- c("region", "casos")
+
 # 2. A partir de los datos genere un vector con la diferencia entre el valor para cada región y el promedio nacional (llamelo dif). 
 
 # 3. Agregue este último vector a su base de datos y luego estime otro vector con las diferencias calculadas al cuadrado (llamelo dif_2). 
