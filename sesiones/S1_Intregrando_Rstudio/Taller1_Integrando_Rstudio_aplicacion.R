@@ -1,6 +1,6 @@
- ###########################################################################################################################
+#**************************************************************************************************************************
 ############# TALLER 1: Integrando RSTUDIO #################################################################################
-############################################################################################################################
+#**************************************************************************************************************************
 
 # Facilitador: José Daniel Conejeros 
 # Correo: jdconejeros@uc.cl
@@ -8,9 +8,9 @@
 # Apoyo: Constanza Lemus 
 # Correo: cplemus@uc.cl 
 
-############################################################################################################################
-### Objetivos
-############################################################################################################################
+#**************************************************************************************************************************
+# Objetivos ----------------------------------------------------------------
+#**************************************************************************************************************************
 
 # Los objetivos para este primer taller son los siguientes 
 
@@ -19,48 +19,33 @@
 # 3. Comprender la lógica de objetos y operar con ellos 
 # 4. Compremder la finalidad de utilizar librerías
 
-############################################################################################################################
-### Tema 1: Consultar y fijar directorios de trabajo
-############################################################################################################################
+#**************************************************************************************************************************
+# Tema 1: Primer código ----------------------------------------------------------------
+#**************************************************************************************************************************
 
-# Punto de partida: 
+# 1.1 Punto de partida:  ----------------------------------------------------------------
  
-print("Hola (ingresa tu nombre)") 
- 
-# Veamos ahora los temas de directorio 
- 
-getwd() # Se obtiene el directorio de trabajo actual
-setwd("ruta") # Establecer directorio de trabajo
-
-#Windows
-setwd("~\Users\josedanielconejeros\Dropbox\Ayudantia_clases\Clases_R\Taller_IntroR") 
-
-#Mac
-setwd("~/Users/josedanielconejeros/Dropbox/Ayudantia_clases/Clases_R/Taller_IntroR")
+print("Hola __ingresa_tu_nombre__") 
 
 # ¿Cómo agregamos comentarios en R?
 
 # : Comentarios que no se ejecutan como comandos
 # + : Sigue el comando en la próxima linea
 # ; : Para escribir más de una función en la misma línea
- 
-############################################################################################################################
-### Tema 2: Explorar vectores y variables 
-############################################################################################################################
 
-#################################
-# 2.1 Aritmética Básica
-#################################
+# 1.1 Aritmética Básica  ----------------------------------------------------------------
 
 2+3 #Suma
 2-3 #Resta
 2*3 #Multiplicación
 2/3 #División
-2^3 #Potencia
+potencia <- 2^3 #Potencia
+ 
+#**************************************************************************************************************************
+# Tema 2: Objetos ----------------------------------------------------------------
+#**************************************************************************************************************************
 
-#################################
-# 2.1 Vectores y variables
-#################################
+# 2.1 Vectores y variables  ----------------------------------------------------------------
 
 c(1) #Vector de un elemento
 c(1, 2 , 3 , 4) #Crear un vector de números
@@ -112,9 +97,7 @@ promedio2 <- mean(secuencia)
 promedio2
 
 
-############################################################################################################################
-### Tema 3: Factores
-############################################################################################################################
+# 2.2 Factores  ----------------------------------------------------------------
 
 #Almacenamiento de variables categóricas 
 #¿Cuál es la diferencia con una variable continua?
@@ -143,53 +126,12 @@ sexo
 sexo <- factor(sexo, labels = c("Mujer", "Hombre"))
 sexo
 
+#**************************************************************************************************************************
+# Tema 3: Matrices y listas   ----------------------------------------------------------------
+#**************************************************************************************************************************
 
-############################################################################################################################
-### Tema 3: Explorar funciones y argumentos 
-############################################################################################################################
+# 3.1 Matrices  ----------------------------------------------------------------
 
-#################################
-# 3.1 Funciones 
-#################################
-log(1000) #Por DEFAULT es logaritmo natural, en base a euler 2,718.
-log(2,718) #Cercano a 1 porque euler elevado a 1 = euler
-log(100, base=10)
-log10(100)
-
-#################################
-# 3.2 Argumentos 
-#################################
-# Podemos explorar los argumentos de una función 
-help("log") #Para saber argumentos (elementos de la función)
-?log
-args("log")
-
-?sum
-args("sum")
-
-#################################
-# 3.3 Podemos crear nuestras propias funciones
-#################################
-# Podemos crear función propias
-fun <- function(x){
-  result <- round(sqrt(x /10), digits = 1)
-  return(result)
-}
-
-fun2 <- function(x){mean(x)}
-
-#Usamos las funciones
-fun(100)
-fun2(100)
-
-
-############################################################################################################################
-### Tema 4: Matrices y listas 
-############################################################################################################################
-
-#################################
-# 4.1 Matrices 
-#################################
 #Ejemplo de matriz
 matrix(1:9,3,3) #Matriz de 3filasx3columnas con valores del 1 al 9
 
@@ -197,10 +139,10 @@ matrix(1:9,3,3) #Matriz de 3filasx3columnas con valores del 1 al 9
 x <- matrix(1:9,3,3)
 x
 
-y <- matrix(1:8,2,4,byrow = F) #Genera una matriz con 2 filas y 4 columnas
+y <- matrix(1:8,2,4,byrow = FALSE) #Genera una matriz con 2 filas y 4 columnas
 y
 
-z <- matrix(1:8,2,4,byrow = T) #Genera la matriz completándola por filas
+z <- matrix(1:8,2,4,byrow = TRUE) #Genera la matriz completándola por filas
 z
 ?matrix
 
@@ -209,6 +151,7 @@ edad <- c(23, 45, 67, 89)
 sexo <- c(1, 0, 1, 0)
 peso <- c(80, 60, 70, 50)
 altura <- c(180, 160, 200, 140)
+promedio <- mean(altura)
 
 matriz_a <- cbind(edad, sexo)
 matriz_a
@@ -229,20 +172,53 @@ diff
 sum <- y + z
 sum
 
-#################################
-# 4.2 Listas
-#################################
+# 3.2 Listas  ----------------------------------------------------------------
+
 #Creamos una lista
 #matriz, valor, vector numérico, vetor de caracteres
-lista <- list(matriz, promedio, sexo, animales) 
-lista
+objeto <- list(matriz, promedio, sexo, animales) 
+objeto
 
 #Vemos el elemento cuatro de la lista (animales)
-lista[[4]]
+objeto[[4]]
 
-############################################################################################################################
-### Tema 5: Uso de librerías y paquetes
-############################################################################################################################
+#**************************************************************************************************************************
+# Tema 4: Explorar funciones y argumentos  ----------------------------------------------------------------
+#**************************************************************************************************************************
+
+# 4.1 Funciones  ----------------------------------------------------------------
+
+log(1000) #Por DEFAULT es logaritmo natural, en base a euler 2,718.
+log(2,718) #Cercano a 1 porque euler elevado a 1 = euler
+log(100, base=10)
+log10(100)
+
+# 4.2 Argumentos  ----------------------------------------------------------------
+
+# Podemos explorar los argumentos de una función 
+help("log") #Para saber argumentos (elementos de la función)
+?log
+args("log")
+
+?sum
+args("sum")
+
+# 4.3  Podemos crear nuestras propias funciones ----------------------------------
+
+fun <- function(x){
+  result <- round(sqrt(x /10), digits = 1)
+  return(result)
+}
+
+fun2 <- function(x){mean(x)}
+
+#Usamos las funciones
+fun(100)
+fun2(100)
+
+#**************************************************************************************************************************
+# Tema 5: Uso de librerías/paquetes  ----------------------------------------------------------------
+#**************************************************************************************************************************
 
 rm(list = ls()) #Limpiamos la memoria
 library() #Puedo revisar los paquetes instalados
@@ -253,38 +229,92 @@ library("libreria")
 
 install.packages("dplyr") #Para manipulación de datos
 install.packages("car") #"Companion to Applied Regression" (Fox & Weisberg)
-library()
+library(dplyr)
 
 #Sólo la primera vez. Este es un paquete que nos permite administrar otros paquetes.
 install.packages("pacman") 
 library(pacman)
+pacman::p_load(dplyr, car)
 pacman::p_load(dplyr,
                car) #Cada vez
 #El camino más tradicional:
+
+library(help = "dplyr")
+
 library(help = "base") #Funciones base de R
 library(dplyr)
 library(car)
 search() #Revisamos los paquetes y herramientas instaladas
 
 
-############################################################################################################################
-### Ejercicio
-############################################################################################################################
+#**************************************************************************************************************************
+# Tema 6: Ejercicio Práctico  ----------------------------------------------------------------
+#**************************************************************************************************************************
 
 # 1. Genere su propia base de datos a partir de la tabla disponible con los casos de coronavirus para cada región del país
 
-base <- read.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto4/2020-06-11-CasosConfirmados-totalRegional.csv")[ ,1:2]
+base <- read.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto4/2020-06-11-CasosConfirmados-totalRegional.csv")[1:17,1:2]
+
+View(base)
+colnames(base)
+
 colnames(base) <- c("region", "casos")
 
 # 2. A partir de los datos genere un vector con la diferencia entre el valor para cada región y el promedio nacional (llamelo dif). 
 
+media <- sum(base$casos)/nrow(base) 
+
+mean(base$casos) #¿ Hay algún problema con este promedio?
+
+# Ajustamos nuestra base a los datos de interés
+base <- base[-17, 1:2] 
+
+base <- read.csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto4/2020-06-11-CasosConfirmados-totalRegional.csv")[1:16,1:2]
+
+# Estimamos las diferencias
+
+dif <- (base$casos - media)
+
+base$dif <- (base$casos - media)
+
+head(base, n=16)
+
 # 3. Agregue este último vector a su base de datos y luego estime otro vector con las diferencias calculadas al cuadrado (llamelo dif_2). 
 
-# 4. Aplique y explique el siguiente código: 
+dif_2 <- (base$dif)^2
+base <- cbind(base, dif_2)
 
-resultado <- sum(dif_2)/(16-1)
+# 4. Aplique y explique el siguiente código: 
+resultado2 <- sum(dif_2)/(nrow(base)-1)
+base <- cbind(base, resultado2)
+
+head(base, n=16)
 
 # 5. Estime la raiz cuadrada del objeto resultado. ¿Qué representa esta estimación?
+sd <- sqrt(resultado2)
+
+base <- cbind(base, sd)
+
+sd(base$casos)
+
+head(base, n=16)
+
+
+#**************************************************************************************************************************
+# Tema 6: Próximo Taller  ----------------------------------------------------------------
+#**************************************************************************************************************************
+
+# Directorio de trabajo
+
+getwd() # Se obtiene el directorio de trabajo actual
+setwd("ruta") # Establecer directorio de trabajo
+
+#Windows
+setwd("~\Users\josedanielconejeros\Dropbox\Ayudantia_clases\Clases_R\Taller_IntroR") 
+
+#Mac
+setwd("~/Users/josedanielconejeros/Dropbox/Ayudantia_clases/Clases_R/Taller_IntroR")
+
 
 ############################################################################################################################
 ############# FIN TALLER 1: Integrando RSTUDIO #############################################################################
