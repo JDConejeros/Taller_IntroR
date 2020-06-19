@@ -21,7 +21,7 @@
 # 5. Guardar nuestra base de datos
 
 #**************************************************************************************************************************
-# Tema 2: Fijar un directorio de trabajo  ----------------------------------------------------------------
+# Tema 1: Fijar un directorio de trabajo  ----------------------------------------------------------------
 #**************************************************************************************************************************
 
 getwd() # Se obtiene el directorio de trabajo actual
@@ -32,8 +32,6 @@ setwd("~\Users\josedanielconejeros\Dropbox\Ayudantia_clases\Clases_R\Taller_Intr
 
 #Mac
 setwd("~/Users/josedanielconejeros/Dropbox/Ayudantia_clases/Clases_R/Taller_IntroR")
-
-
 
 #**************************************************************************************************************************
 # Tema 2: Importar una base de datos y explorar  ----------------------------------------------------------------
