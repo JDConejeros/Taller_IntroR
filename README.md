@@ -15,7 +15,7 @@ Los temas de las sesiones son las siguientes:
 
 [Sesión 1:](https://github.com/JDConejeros/Taller_IntroR/tree/master/sesiones/S1_Intregrando_Rstudio) Exploración inicial con `R` y `RStudio`
 
-[Sesión 2:]()** Importar y explorar una base de datos
+[Sesión 2:](https://github.com/JDConejeros/Taller_IntroR/tree/master/sesiones/S2_Explorar_BBDD) Importar y explorar una base de datos
 
 [Sesión 3:]()** Procesamiento de datos con `dplyr` I
 
