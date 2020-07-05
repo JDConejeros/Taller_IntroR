@@ -17,11 +17,11 @@ Los temas de las sesiones son las siguientes:
 
 [Sesión 2:](https://github.com/JDConejeros/Taller_IntroR/tree/master/sesiones/S2_Explorar_BBDD) Importar y explorar una base de datos
 
-[Sesión 3:]()** Procesamiento de datos con `dplyr` I
+[Sesión 3:](https://github.com/JDConejeros/Taller_IntroR/tree/master/sesiones/S3_Procesamiento1) Procesamiento de datos con `dplyr` I
 
-[Sesión 4:]()** Procesamiento de datos con `dplyr` II
+[Sesión 4:](https://github.com/JDConejeros/Taller_IntroR/tree/master/sesiones/S4_Procesamiento2) Procesamiento de datos con `dplyr` II
 
-[Sesión 5:]()** Asociación de variables
+[Sesión 5:](https://github.com/JDConejeros/Taller_IntroR/tree/master/sesiones/S5_Asociacion) Asociación de variables
 
 [Sesión 6:]()** Introducción a la visualización de datos con `ggplot`
 
