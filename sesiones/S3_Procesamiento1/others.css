@@ -1,0 +1,73 @@
+
+@import url(https://fonts.googleapis.com/css?family=Fira+Sans:300,300i,400,400i,500,500i,700,700i);
+@import url(https://cdn.rawgit.com/tonsky/FiraCode/1.204/distr/fira_code.css);
+
+body {
+  font-family: 'Fira Sans','Droid Serif', 'Palatino Linotype', 'Book Antiqua', Palatino, 'Microsoft YaHei', 'Songti SC', serif;
+}
+
+.remark-code, .remark-inline-code {
+  font-family: 'Fira Code', 'Lucida Console', Monaco, monospace;
+  font-size: 80%;
+}
+
+
+div.my-footer {
+  font-size: 9pt;
+	text-align: left;
+	position: fixed;
+	bottom: 0px;
+	left: 3px;
+	height: 20px;
+	width: 100%;
+}
+
+.remark-slide-number {
+  position: inherit;
+}
+
+.remark-slide-number .progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  height: 4px;
+  display: block;
+  left: 0;
+  right: 0;
+}
+
+.remark-slide-number .progress-bar {
+  height: 100%;
+  background-color: red;
+}
+
+
+.container {
+    position: absolute;
+    top: 33%;
+    left: 50%;
+    font-size: 80%;
+    -moz-transform: translateX(-100%) translateY(-50%);
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+    text-align: justify;
+}
+
+.container2 {
+    position: absolute;
+    top: 63%;
+    left: 50%;
+    font-size: 80%; 
+    -moz-transform: translateX(-100%) translateY(-50%);
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+    text-align: justify;
+}
+
+
+.large { font-size: 130% }
+
+.font80 {
+  font-size: 80%;
+}
+
+

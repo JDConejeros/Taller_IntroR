@@ -1,0 +1,498 @@
+---
+title: "Taller 3: Procesamiento de datos "
+author: |
+  | José Daniel Conejeros
+institute: "Magíster(c) Sociología UC - Licenciado en Ciencias Sociales"
+date: | 
+  | Junio 2020
+  `r icon::fa("link")` [Código del taller](https://github.com/JDConejeros/Taller_IntroR/tree/master/sesiones/S2_Explorar_BBDD) 
+  `r icon::ii("email")` [jdconejeros@uc.cl](jdconejeros@uc.cl)
+  `r icon::fa("github")` [JDConejeros](https://github.com/JDConejeros) 
+  
+  `r icon::fa("linkedin")` [joseconejerosp](https://www.linkedin.com/in/joseconejerosp/) 
+  `r icon::fa("researchgate")` [Jose_Conejeros](https://www.researchgate.net/profile/Jose_Conejeros) 
+output:
+  xaringan::moon_reader:
+    lib_dir: "libs"
+    css: ["xaringan-themer.css", "others.css"]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
+---
+
+layout: true
+
+background-image: url(https://raw.githubusercontent.com/JDConejeros/Taller_IntroR/master/image/completo.png)
+background-position: 99% 5%
+background-size: 12%
+
+<div class="my-footer"><span>&copy; 2020 Taller de Procesamiento de Datos en R </span></div>
+
+
+```{r setup, include=FALSE}
+#options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+#Tema base
+#xaringanthemer::mono_accent(
+#  code_highlight_color = "rgba(255, 211, 0, .35)",
+#  link_color = "#FF23A2",
+#  base_color = "#03418A")
+```
+
+```{r, include=FALSE, warning=FALSE}
+#Agregamos otras librerías de interés
+#devtools::install_github("ropenscilabs/icon")
+library("icon")
+#devtools::install_github("EvaMaeRey/flipbookr")
+library("flipbookr")
+```
+
+```{r, include=FALSE, warning=FALSE}
+#remotes::install_github('rstudio/pagedown')
+pagedown::chrome_print("~/Dropbox/Ayudantia_clases/Clases_R/Taller_IntroR/sesiones/S2_Explorar_BBDD/Taller2_Explorar_BBDD.html", output="Taller2_Explorar_BBDD.pdf")
+```
+
+---
+
+# ¿Qué hemos visto hasta el momento? 
+
+.pull-left[ 
+
++ Instalación de `R` y `RStudio` 
+
++ Explorar espacios de trabajo 
+
++ Comprender la lógica de objetos 
+
++ Explorar vectores, listas y matrices 
+
++ Estructura de funciones y argumentos 
+
++ Instalar y cargar librerías/paquetes 
+
+]
+
+.pull-right[
+
+```{r echo=FALSE, fig.align='center', fig.height=1, out.height="100%", out.width="100%"}
+knitr::include_graphics("https://github.com/JDConejeros/Taller_IntroR/blob/master/sesiones/S1_Intregrando_Rstudio/fig/i5.png?raw=true")
+```
+
+]
+
+.large[.right[[¿Alguna pregunta?]()]]
+
+---
+
+# Hoy: Definir nuestro espacio de trabajo
+
+```{r eval=FALSE, message=FALSE, warning=FALSE}
+getwd() # Directorio de trabajo actual
+
+setwd("ruta") # Establecer directorio de trabajo
+```
+
+
+```{r echo=FALSE, fig.align='center', fig.height=1, out.height="40%", out.width="60%"}
+knitr::include_graphics("https://github.com/JDConejeros/Taller_IntroR/blob/master/sesiones/S2_Explorar_BBDD/fig/f1.png?raw=true")
+```
+
+.right[[También podemos generar proyectos de trabajo]()]
+
+---
+
+# Estructura de una base de datos 
+
+Las filas representan las [observaciones]()  -  Las columnas representan las [variables]()  
+
+
+.pull-left[ 
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+id <- c(1, 2, 2, 4, 4)
+edad <- c(23, 45, 67, 201)
+sexo <- c(1, 0, 1, 0, NA)
+peso <- c(80, 60, 70, 50, 55)
+altura <- c(180, 160, 200, 140, 300)
+
+data <- as.data.frame(cbind(id, edad, sexo, 
+                            peso, altura))
+data <- as.data.frame(data)
+data
+```
+
+]
+
+
+.pull-rigth[ 
+
+<br>
+
+<br>
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(pander)
+library(dplyr)
+library(kableExtra)
+
+Dim <- c("1d", "2d", "nd")
+Homogeneous  <- c("Atomic Vector", "Matrix", "Array")
+Heterogeneous <- c("List", "Data - Frame", " ")
+
+tabla1 <- as.table(cbind(Dim, Homogeneous, Heterogeneous))
+kable(tabla1, format = "html", row.names = FALSE, align = c("ccc"))
+```
+
+
+.center[ Mayor detalle pueden revisar el siguiente [enlace](http://adv-r.had.co.nz/Data-structures.html) ]
+
+]
+
+---
+
+# Importar una base de datos 
+
+```{r eval=FALSE, message=FALSE, warning=FALSE}
+install.packages(c("haven", "readxl", "readr"))
+library(haven)
+library(readxl)
+library(readr)
+```
+
+.pull-left[ 
+
+```{r echo=FALSE, fig.align='center', fig.height=1, out.height="95%", out.width="95%"}
+knitr::include_graphics("https://github.com/JDConejeros/Taller_IntroR/blob/master/sesiones/S2_Explorar_BBDD/fig/f2.png?raw=true")
+```
+
+]
+
+.pull-left[ 
+
+<br>
+
+<br>
+
+Mayor detalle del paquete `readr` [aquí](https://rawgit.com/rstudio/cheatsheets/master/data-import.pdf) 
+
+
+Mayor detalle del paquete `haven` [aquí](https://haven.tidyverse.org/) 
+
+]
+
+---
+
+# Explorar nuestra base de datos 
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+dim(data)   # Observaciones y variables
+
+names(data) # Nombre de nuestras variables 
+
+str(data)   # Visor de nuestras variables
+```
+
+---
+
+# Explorar nuestra base de datos 
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+head(data)  # Primeras 6 observaciones
+
+tail(data)  # Últimas 6 observaciones
+```
+
+
+---
+
+# Explorar nuestra base de datos 
+
+```{r eval=FALSE, message=FALSE, warning=FALSE}
+summary(data)
+
+library(skimr)
+skim(data)
+```
+
+
+```{r, echo=FALSE, warning=FALSE}
+tabla2 <- skimr::skim(data)  
+tabla2$complete_rate <- NULL
+tabla2$complete_rate <- NULL
+
+kableExtra::kable(tabla2, format = "html", row.names = FALSE, align = c("cccccccc"))  %>% 
+  kableExtra::kable_styling(font_size=13)
+```
+
+<br>
+
+<br>
+
+<br>
+
+.large[.right[[¿Qué podemos ver de nuestras variables?]()]]
+
+---
+
+# Validación de una base de datos 
+
+**Identificar observaciones duplicadas** 
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Nuestros casos únicos
+unique(data)
+# Nuestros casos únicos
+unique(data$id)
+# Nuestros casos duplicados
+duplicated(data$id)
+```
+
+---
+
+# Validación de una base de datos 
+
+**Identificar observaciones duplicadas** 
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Nuestros casos duplicados
+data$caso <- duplicated(data$id)
+# Resumen de duplicados
+table(data$caso)
+# Nuestros casos duplicados
+data[duplicated(data$id),]
+```
+
+---
+
+# Validación de una base de datos 
+
+**Identificar observaciones duplicadas** 
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Quitar los casos duplicados
+data2 <- data[unique(data$id),]
+data2
+```
+
+**Revisar valores fuera de rango** 
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Mínimo
+min(data$edad)
+# Máximo
+max(data$edad)
+```
+
+---
+
+# Validación de una base de datos 
+
+**Revisar valores fuera de rango** 
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Tabla de valores
+table(data$edad)
+table(data$sexo)
+
+# Descriptivos
+summary(data$edad)
+```
+
+---
+
+# Validación de una base de datos 
+
+**Explorar codificación de los casos pérdidos** 
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Revisar casos perdidos 
+table(data$sexo, useNA = "ifany")
+# Mostrar los casos pérdidos
+is.na(data)
+```
+
+---
+
+# Validación de una base de datos 
+
+**Explorar codificación de los casos pérdidos**
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+which(is.na(data$sexo)) # Indica la fila 
+# Eliminar casos perdidos
+data3 <- na.omit(data)
+data3
+```
+
+
+---
+
+# Validación de una base de datos 
+
+**Explorar codificación de los casos pérdidos**
+
+.pull-left[ 
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Recodificar casos perdidos (imputar)
+data4 <- data
+data4$sexo[is.na(data$sexo)] <- 1
+data
+data4
+```
+
+]
+
+.pull-right[ 
+
++ Chequear efectividad de los filtros (si es que los hay): próximo taller
+
++ Chequear que las variables estén en un formato correcto para el análisis: próximo taller
+
+.right[[¿Qué otros temas podríamos validar?]()]
+
+]
+
+---
+
+# Exportar una base de datos 
+
+Podemos guardar nuestra base como texto plano: 
+
+```{r eval=FALSE, message=FALSE, warning=FALSE}
+write.table(data, file="data.txt", sep="\t")
+```
+
+Podemos guardar en un archivo separado por comas (`csv`):
+
+```{r eval=FALSE, message=FALSE, warning=FALSE}
+# Separado por comas
+write.csv(data, file="data.csv", row.names = FALSE)
+
+# Otras opciones de separación
+write.csv(data, file="data.csv", row.names = FALSE, sep = "-")
+```
+
+.large[.right[[¿Qué ventaja tienen estos formatos?]()]]
+
+Podemos guardar en un `excel` tradicional: 
+
+```{r eval=FALSE, message=FALSE, warning=FALSE}
+library(openxlsx)
+write.xlsx(data, file="data.xlsx")
+```
+
+---
+
+# Exportar una base de datos 
+
+Podemos guardar en el formato de `SPSS`:
+
+```{r eval=FALSE, message=FALSE, warning=FALSE}
+library(haven)
+write_sav(data, "data.sav")
+```
+
+Podemos guardar en el formato de `SAS`:
+
+```{r eval=FALSE, message=FALSE, warning=FALSE}
+write_sas(data, "data.sas7bdat")
+```
+
+Podemos guardar en el formato de `Stata`:
+
+```{r eval=FALSE, message=FALSE, warning=FALSE}
+write_dta(data, "data.dta")
+```
+
+Podemos guardar en el formato de `R`:
+
+```{r eval=FALSE, message=FALSE, warning=FALSE}
+save(data, file="data.Rdata")
+```
+
+---
+
+# Próximo taller
+
++ Encadenar operaciones: `%>%` (`pipe`)  
+
++ Filtrar y ordenar datos: `filter()` & `arrange()`
+
++ Seleccionar columnas: `select()`
+
++ Generar nuevas variables: `mutate` & `$`
+
++ Recodificar y etiquetar: `indexar code`  & `dplyr`
+
+---
+
+# Próximo taller
+
+```{r echo=FALSE, fig.align='center', fig.height=1, out.height="60%", out.width="60%"}
+knitr::include_graphics("https://miro.medium.com/max/1200/1*O4LZwd_rTEGY2zMyDkvR9A.png")
+```
+
+.right[Pueden adelantar revisando el siguiente [enlace](https://dplyr.tidyverse.org/)]
+
+---
+
+# Donación
+
+
+Se donará el 25% de lo recaudado en el taller: [$350.000]().
+
+Se está gestionando [cajas de alimentos]() para personas con problemas económicos en La comuna de la Pintana, sector el castillo.
+
+¡Se les avisará cuando se entreguen estas cajas! (en las [próximas 2 semanas]())
+
+<br>
+
+<br>
+
+<br>
+
+<br>
+
+<br>
+
+<br>
+
+<br>
+
+.right[Sugerencias: `r icon::ii("email")` [Buzón anónimo](https://www.diboks.com/buzon-de-sugerencias/#!module=box&page=list&box_id=pkc10aa728507df791545fdbdf1a923d48)]
+
+---
+
+layout: false
+
+class: inverse, middle, center
+
+.center[
+
+# ¡Gracias!
+
+Presentación generada en:
+
+[<img src="https://annakrystalli.me/talks/assets/logos/xaringan-hex.png" width="100" />](https://github.com/yihui/xaringan) [<img src="https://github.com/JDConejeros/Taller_IntroR/blob/master/image/JJR%20350px.png?raw=true" width="102" />](https://github.com/JDConejeros)
+
+`r icon::ii("email")` [jdconejeros@uc.cl](jdconejeros@uc.cl)
+`r icon::fa("linkedin")` [joseconejerosp](https://www.linkedin.com/in/joseconejerosp/) 
+
+`r icon::fa("github")` [JDConejeros](https://github.com/JDConejeros) 
+`r icon::fa("researchgate")` [Jose_Conejeros](https://www.researchgate.net/profile/Jose_Conejeros) 
+
+]
+
+
+
