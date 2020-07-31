@@ -23,9 +23,9 @@ Los temas de las sesiones son las siguientes:
 
 [Sesión 5:](https://github.com/JDConejeros/Taller_IntroR/tree/master/sesiones/S5_Asociacion) Asociación de variables
 
-[Sesión 6:]()** Introducción a la visualización de datos con `ggplot`
+[Sesión 6:](https://github.com/JDConejeros/Taller_IntroR/tree/master/sesiones/S6_intro_vis) Introducción a la visualización de datos con `ggplot`
 
-[Sesión 7:]()** Reportería con Rmarkdown
+[Sesión 7:](https://github.com/JDConejeros/Taller_IntroR/tree/master/sesiones/S7_Reporte) Reportería con Rmarkdown
 
 # Links de referencia
 

@@ -1,0 +1,198 @@
+---
+title: "Taller R - Sesión 7: Reportería con Rmarkdown"
+author: "José Daniel Conejeros"
+date: "Julio 2020"
+output: pdf_document
+header-includes:
+  - \usepackage[spanish,es-tabla]{babel}
+  - \usepackage[utf8]{inputenc}
+urlcolor: blue
+fontsize: 10pt
+---
+
+El **objetivo** de esta sesión es introducir a la reportería de análisis estadísticos con Rmarkdown. 
+
+## I. ¿Qué es R Markdown?
+
+Es un espacio para elaborar documentos en PDF, HTML, MS-WORD (entre muchas otras) con una sintaxis de formato simple. Dado que R es un entorno de Desarrollo Integrado, R Markdown proporciona un marco unificado para la ciencia de datos combinando código, resultados y texto con el fin de crear documentos  para que puedan ser reproducibles. 
+\vspace{0.3 cm}
+
+Los principales elementos son: 
+
+1. **Encabezado YAML: configuraciones preliminares al documento.** Va en el encabezado del Rmarkdown con especificaciones tipo:
+
+- Título.
+- Autor.
+- Fecha.
+- Formato de salida.
+- Otros (infinitas configuraciones adicionales).
+
+\vspace{0.3 cm}
+
+2. __Trozos/Bloques de códigos rodeados por: ` ```{r} ``` `__
+
+Esto es un **chunk**:
+
+```{r} 
+vector <- c(1:10) 
+vector
+``` 
+
+Los argumentos nos permite especificar la salida de los **chunk** los más genéricos son los siguientes:
+
+- `inclue = FALSE`. Los códigos y los resultados no van aparecer en el documento final. 
+
+```{r, include=FALSE} 
+vector <- c(1:10) 
+vector
+``` 
+
+- `echo = FALSE`. Los códigos no aparecen pero sí los resultados.
+
+```{r include=FALSE}
+vector <- c(1:10) 
+vector
+``` 
+
+- `message = FALSE`. No aparecen mensajes.
+
+- `warning = FALSE`. No aparecen mensajes tipo warnings.
+
+- `fig.cap="Título plot"`. Agrega un título a los resultados gráficos.
+
+\vspace{0.3 cm}
+
+3. **Texto con formato simple.** Todo lo que no está como chunk o en el YAML es texto. A este texto yo le puedo agregar código en línea. Por ejemplo, puedo decir que la media del vector es: `mean(vector)` y arroja como resultado `r mean(vector)`.
+
+\break
+
+## II. Flujo en Rmarkdown
+
+Al realizar click en la opción **Knit** (tejer), automáticamente se generará un documento que incluye tanto el contenido como la salida de cualquier fragmento de código en R. El flujo de trabajo en R es el siguiente: 
+
+![Flujo en Rmarkdown](rmarkdownflow.png)
+
+## III. Ejemplo: Datos PSU
+
+### a. Código - Resultado
+
+```{r eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+# Utilizamos este comando para desactivar notación científica 
+options(scipen=999)
+
+# Abrimos nuestra base de datos
+library(readr)
+psu <- read_csv("psu_sample.csv")       
+
+# Exploramos
+dim(psu)     
+colnames(psu)
+head(psu)
+```
+
+\break
+
+### b. Descriptivos 
+
+```{r eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+# Podemos utilizar el clásico
+summary(psu)
+```
+
+### c. Expresiones matemáticas y código en línea
+
+En la tabla anterior podemos ver la estimación de dos estadísticos:
+
+- **El promedio**. Por ejemplo el puntaje promedio de la prueba de matemáticas es de `r mean(psu$mate)`
+
+$$\overline{x}={\frac {1}{n}}\sum _{i=1}^{n}x_{i}={\frac {x_{1}+x_{2}+\cdots +x_{n}}{n}}$$
+
+- **La desviación estándar**. Por ejemplo la desviación estándar del puntaje de la prueba de matemáticas es de `r sd(psu$mate)`.
+
+$$s=\sqrt{\frac{1}{N-1} \sum_{i=1}^{n} (x_i-\bar{x})^2}$$
+
+\break 
+
+
+### d. Tablas
+
+```{r eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+# Tabla con estadísticos descriptivos
+library(dplyr)
+tabla <- psu %>%
+  dplyr::summarize(n = n(),
+            mean = mean(mate, na.rm = T),
+            sd = sd(mate, na.rm = T), 
+            min = min(mate, na.rm = T),
+            q25 = quantile(mate, probs = 0.25, na.rm = T),
+            median = median(mate, na.rm = T),
+            q75 = quantile(mate, probs = 0.75, na.rm = T),
+            max = max(mate, na.rm = T)
+  ) %>%
+  rename(Frecuencia=n,
+         Promedio=mean,
+         Std = sd,
+         Min = min,
+         Q25 = q25,
+         Q50 = median,
+         Q75 = q75,
+         Max = max
+  )  
+
+# Podemos guardar como una data y transformar en tabla:
+library(knitr)
+kable(tabla)
+```
+
+\break
+
+### e. Gráficos
+
+```{r echo=TRUE, message=FALSE, warning=FALSE, eval=TRUE, fig.align='center', out.height="100%", out.width="100%", fig.cap="Mi primer gráfico en RMarkdown"}
+library(ggplot2)
+ggplot(psu, aes(x=cien, y=educmadre)) + 
+  geom_point()+
+  stat_smooth(method="lm", se=T, formula=y ~ x) + 
+  xlab("Distribución Puntaje PSU Ciencia") + 
+  ylab("Años educación de la madre") + 
+  theme_bw() + 
+  facet_wrap(~grupo_depend)
+```
+
+
+\break
+
+
+### f. Ejemplo de un modelo de regresión 
+
+```{r, eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE, results='asis'}
+# Estimo los modelos
+m1 <- lm(mate ~ sexo, data=psu)
+m2 <- lm(mate ~ sexo + grupo_depend, data=psu)
+m3 <- lm(mate ~ sexo + grupo_depend + educpadre + educmadre, data=psu)
+m4 <- lm(mate ~ sexo + grupo_depend + educpadre + educmadre + factor(beca), data=psu)
+
+# Genero una tabla con mis modelos
+library(texreg)
+textreg(l=list(m1, m2, m3, m4),  
+caption="Modelos de regresión lineal", float.pos="h" , digits = 3,single.row = FALSE,
+custom.model.names = c("Modelo 1","Modelo 2","Modelo 3","Modelo 4"),
+caption.above = TRUE,  include.ci = FALSE, stars = c(0.01, 0.05, 0.1), fsingle.row = T,
+custom.coef.names=c("Intercepto", "Masculino", "Part. Pagado", "Part. Subvencionado", 
+                    "Educación Padre", "Educación Madre","Becado"))
+```
+
+
+\break 
+
+## Referencias
+
+Podemos incluir links o accesos directos: 
+
+[Página oficial de Rmarkdown](http://rmarkdown.rstudio.com): Aquí puedes todo lo referido a esta herramienta para generar reportes. Hay galerías, formatos, documentos de replicación u otros. Solo tienes que explorar.
+
+[R para Ciencia de Datos. Capítulo 5](https://r4ds.had.co.nz/r-markdown.html): En este capítulo se detallan los principales comandos y opciones para operar con las funciones de Rmarkdown. 
+
+[Video introductorio para construir presentaciones en Markdown](https://www.youtube.com/watch?v=i0TIYtqPMNQ&feature=youtu.be). Recomiendo revisar los últimos 20 minutos para automatizar reportes. 
+
+
