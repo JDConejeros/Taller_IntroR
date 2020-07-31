@@ -59,7 +59,7 @@ library(dplyr)
 ts <- ts %>% 
   mutate(genero = factor(genero), 
          nom_region = factor(nregion), 
-         lavar_manos = factor(d31, exclude = 3),
+         lavar_manos = factor(d31, exclude = c(3, -888, -999)),
          casa = factor(d34, exclude = 3))
 
 str(ts)
@@ -92,10 +92,11 @@ library(stargazer)
 stargazer(ts, type="text", title = "Estadísticos Descriptivos")
 stargazer(ts, type="text", title = "Estadísticos Descriptivos", out="sesiones/S5_Asociacion/tablas/descriptivos.txt")
 stargazer(ts, type="latex", title = "Estadísticos Descriptivos", out="sesiones/S5_Asociacion/tablas/descriptivos2.tex")
+stargazer(ts, type="html", title = "Estadísticos Descriptivos", out="sesiones/S5_Asociacion/tablas/descriptivos2.html")
 
 # 2.3 También podríamos hacer esto con dplyr: Descriptivos para variables continuas ---------------------------------------
 ts %>%
-  summarize(n = n(),
+  dplyr::summarize(n = n(),
             mean = mean(edad, na.rm = T),
             sd = sd(edad, na.rm = T), 
             min = min(edad, na.rm = T),
@@ -114,6 +115,7 @@ ts %>%
          Max = max
   )  
 
+
 # 2.4 Descriptivos para variables categóricas ----------------------------------------------------------------
 tabla_genero <- table(ts$genero)
 prop.table(tabla_genero)
@@ -121,10 +123,11 @@ prop.table(tabla_genero)*100
 round(prop.table(tabla_genero)*100, 1)
 paste0(round(prop.table(tabla_genero)*100, 2), "%")
 
+library(dplyr)
 # A la dplyr: 
 tabla_genero2 <- ts %>%
   group_by(genero) %>%
-  summarize(n = n()) %>%
+  dplyr::summarize(n = n()) %>%
   mutate(prop = round(n/sum(n),2),
          porc = n/sum(n)*100, 
          porc = round(porc,1),
@@ -132,7 +135,7 @@ tabla_genero2 <- ts %>%
   rename(Género=genero,
          Frecuencia=n,  
          Proporción=prop,
-         Porcentaje=porc)
+         Porcentaje=porc) 
 
 # 2.5 Podríamos construir una función para obtener las estimaciones ------------------------------------------
 
@@ -164,6 +167,7 @@ id <- c(1:nrow(ts))
 library(survey)
 ts_w <- svydesign(ids = ~1, data = ts, weights = ts$factor)
 ?svydesign
+summary(ts)
 summary(ts_w)
 
 # 3.1 Vamos a generar estimaciones ponderadas para sexo ---------------------------------------------------------------
@@ -182,7 +186,8 @@ tabla_genero
 # 3: >60
 
 ts <- ts %>% 
-  mutate(etario = if_else(edad>=18 & edad<=35, 1, if_else(edad>36 & edad<=60, 2, 3)))
+  mutate(etario = if_else(edad>=18 & edad<=35, 1, if_else(edad>=36 & edad<=60, 2, 3)))
+
 table(ts$edad, ts$etario, useNA = "ifany")
 
 ts_w <- svydesign(ids = ~1, data = ts, weights = ts$factor)
@@ -198,8 +203,9 @@ tabla_etario
 # 3.3 Otros caminos para hacer lo mismo: -----------------------------------------------------
 # Sexo
 ts$sexo <- as.numeric(ts$genero=="Mujer") # Genero una dummy
-mujer <- weighted.mean(ts$sexo, ts$factor, na.rm = T) # Obtengo un promedio ponderado
-hombre <- (1-mujer)
+mujer <- weighted.mean(ts$sexo, ts$factor, na.rm = T)*100 # Obtengo un promedio ponderado
+hombre <- (100-mujer)
+hombre
 
 # Grupo etario 
 #install.packages("srvyr")
@@ -228,6 +234,7 @@ ts$ingreso_2 <- log(ts$ingreso)
 ts$ingreso_2[ts$ingreso_2=="-Inf"] <- 0
 
 # Estimamos las correlaciones
+?cor
 cor(ts$ingreso, ts$edad)
 cor(ts$ingreso, ts$edad_2)
 
@@ -246,13 +253,13 @@ plot(ts$ingreso, ts$edad^2)
 round(cor(ts[, c(3,4,11,12)]),2)
 pairs(ts[, c(3,4,11,12)])
 
-install.packages("corrplot")
-library(corrplot)
+#install.packages("corrplot")
+library(corrplot) 
 # Matris de correlaciones de pearson  
 cor <- cor(ts[, c(3,4,11,12)])
 corrplot(cor, method = "shade", shade.col = NA, type = "lower", addCoef.col = "black")
 
-install.packages("PerformanceAnalytics")
+#install.packages("PerformanceAnalytics")
 library(PerformanceAnalytics)
 chart.Correlation(ts[, c(3,4,11,12)], histogram = T, pch=19)
 
@@ -263,7 +270,7 @@ library(ggplot2)
 library(ggpubr)
 ggplot(ts, aes(x=ingreso,y=edad_2)) +
   geom_point(position=position_jitter(w=0.1,h=0)) +
-  geom_smooth(method="lm", se=FALSE) +
+  geom_smooth(method="lm", se=T) +
   xlab('Ingreso') +
   ylab('Edad al cuadrado') + theme_bw() +
   stat_cor(label.x = 3000000, label.y = 7500) 
@@ -306,36 +313,38 @@ prop.table(tabla2, margin=2) # % Columnas
 ## 5.2 Asociaciones con variables categóricas -------------------------
 
 # Chi-cuadrado:
-chisq.test(ts$genero, ts$casa, correct=F) 
-chisq.test(ts$genero, ts$casa, correct=T) #Corrección para un escenario más conservador 
+chisq.test(ts$genero, ts$casa, correct=FALSE) 
+chisq.test(ts$genero, ts$casa, correct=TRUE) #Corrección para un escenario más conservador 
 chisq.test(ts$etario, ts$casa, correct=F) 
 
 # Odds ratio:
+install.packages("epitools")
+library(epitools)
 prop.table(tabla1, margin=2)
 oddsratio(table(ts$genero, ts$casa))
-(0.91107078/0.08892922)/(0.81445312/0.18554688) # Las odds de permanecer en casa 2.33397 veces más en las mujeres que para los hombres
+(0.91107078/0.08892922)/(0.81445312/0.18554688) # Las odds de permanecer en casa 2.33397 veces más en las mujeres que para los hombres.
 (95*502)/(49*417)
 
 # Riesgo Relativo:
-#install.packages("epitools")
-library(epitools)
 riskratio(table(ts$sexo, ts$casa))
 (502/551) / (417/512) # El riesgo de quedarse en casa es 1.118629 veces mayor para las mujeres respecto a los hombres   
 
-riskratio(table(ts$sexo, ts$casa), rev="r")
+riskratio(table(ts$sexo, ts$casa), rev="rows")
 
 #**************************************************************************************************************************
 # Tema 6: Modelos de regresión lineal ----------------------------------------------------------------
 #**************************************************************************************************************************
 
 ## 6.1 Modelo de regresión lineal  -------------------------
-
+?lm
 m1 <- lm(ingreso~edad, data=ts)
 summary(m1)
 
-#install.package(texreg)
+#install.packages("texreg")
 library(texreg)
+texreg(m1)
 screenreg(m1)
+htmlreg(m1)
 
 # Control Estadístico
 m2 <- lm(ingreso~edad + edad_2, data=ts)
@@ -343,7 +352,7 @@ m3 <- lm(ingreso~edad + edad_2 + genero, data=ts)
 
 screenreg(list(m1, m2, m3))
 
-install.packages("sjPlot")
+#install.packages("sjPlot")
 library(sjPlot)
 
 # Algunos gráficos
@@ -354,37 +363,40 @@ plot_model(m3, type = "pred", terms = c("edad", "genero"))
 plot_model(m3, type = "pred", terms = c("edad_2", "genero"))
 
 # Graficamos
+library(ggplot2)
 ggplot(ts, aes(x=edad, y=ingreso)) + 
-  geom_point()+
+  geom_point() +
   stat_smooth(method="lm", se=T, colour="red") + 
-  stat_smooth(method="lm", se=T, formula=y ~ x + I(x^3)) + 
+  stat_smooth(method="lm", se=T, formula=y ~ x + I(x^2)) + 
   theme_bw()
 
 # Por grupos
 ggplot(ts, aes(x=edad, y=ingreso, color = genero)) + 
   geom_point()+
-  stat_smooth(method="lm", se=T, formula=y ~ x + I(x^3)) + 
+  stat_smooth(method="lm", se=T, formula=y ~ x + I(x^2)) + 
   theme_bw()
 
 # Ajustemos los ingresos
-ts2 <- ts %>% filter(ingreso<=1000000, ingreso!=401500)
+ts2 <- ts %>% filter(ingreso<=2000000, ingreso!=401500, edad<80)
 
 g1 <- ggplot(ts2, aes(x=edad, y=ingreso)) + 
   geom_point()+
-  stat_smooth(method="lm", se=T, formula=y ~ x + I(x^3)) + 
+  stat_smooth(method="lm", se=T, formula=y ~ x + I(x^2)) + 
   theme_bw()
 
 g2 <- ggplot(ts2, aes(x=edad, y=ingreso, color = genero)) + 
   geom_point()+
-  stat_smooth(method="lm", se=T, formula=y ~ x + I(x^3)) + 
+  stat_smooth(method="lm", se=T, formula=y ~ x + I(x^2)) + 
   theme_bw()
 
+install.packages("ggpubr")
+library(ggpubr)
 ggarrange(g1, g2, ncol = 2, nrow = 1)
 
 # Otra manera
-ggplot(ts2, aes(x=edad, y=ingreso, color = genero)) + 
+ggplot(ts2, aes(x=edad, y=ingreso)) + 
   geom_point()+
-  stat_smooth(method="lm", se=T, formula=y ~ x + I(x^3)) + 
+  stat_smooth(method="lm", se=T, formula=y ~ x + I(x^2)) + 
   theme_bw() + facet_wrap(~genero)
 
 
@@ -394,7 +406,7 @@ ggplot(ts2, aes(x=edad, y=ingreso, color = genero)) +
 m1 <- lm(casa~edad + ingreso + genero, data=ts2) # Modelo de probabilidad lineal para permanecer en casa 
 m2 <- lm(lavar_manos~edad + ingreso + genero, data=ts2) # Modelo de probabilidad lineal para lavarse las manos
 
-screenreg(list(m1, m2), digits = 4)
+screenreg(list(m1, m2), digits = 2)
 
 #**************************************************************************************************************************
 ############# FIN TALLER 5: DESCRIPTIVOS Y ASOCIACIÓN DE VARIABLES ########################################################
